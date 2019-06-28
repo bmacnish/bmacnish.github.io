@@ -14,7 +14,7 @@ avatar: https://raw.githubusercontent.com/barryclark/jekyll-now/master/images/je
 #
 # Flags below are optional
 #
-
+theme: jekyll-theme-minimal
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
@@ -23,7 +23,7 @@ footer-links:
   flickr:
   github: bmacnish
   instagram: brienna.macnish
-  linkedin: Brienna Macnish
+  linkedin: brienna-macnish
   pinterest:
   rss: # just type anything here for a working RSS icon
   twitter:
