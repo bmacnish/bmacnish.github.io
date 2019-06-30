@@ -31,35 +31,21 @@ class Robot
 end
 {% endhighlight %}
 
-```Ruby
-class Robot
-  attr_reader :name
+If our code has many dependencies it can make our code difficult to read and update because a small change in a class like `Greeting` may have flow on effects to other distant classes. When we have too many dependencies changing one part of your code will break other unrelated functionality. One technique for reducing the negative impact of dependencies in your code is - you guessed it - *dependency injection*.
 
-  def initialize(name)
-    @name = name
-  end
-
-  def introduce
-    Greeting.say_hello(name)
-  end
-end
-```
-
-If our code has many dependencies it can make our code difficult to read and difficult to update. A small change in a class like `Greeting` may have flow on effects to other distant classes meaning that changing one part of your code will break other functionality. One technique for reducing the negative impact of dependencies in your code is - you guessed it - *dependency injection*.
-
-We can use dependency injection to make our code more flexible, extensible and reduce the likelihood that changes to the way the `Greeting` class is implemented will cause problems in our  `Robot` class.
+We can use dependency injection to make our code more flexible, extensible and reduce the likelihood that changes to the way the `Greeting` class is implemented will cause problems in our `Robot` class.
 
 ## What's dependency injection?
 
 ##### Dependency injection lets us pass an object's dependencies to it as an argument.
 
-In the example below, we pass a new `Greeting` object to the `Robot` class in the initializer as a default argument. Our `introduce` method now no longer depends on `Greeting` directly but rather relies on being passed an argument we have called `greeting` which can respond to the `say_hello` argument.
+In the example below, we pass a new `Greeting` object to the `Robot` class as a default argument. Our `introduce` method now no longer depends on `Greeting` directly but rather relies on being passed an argument we have called `greeting` which can respond to the `say_hello` argument.
 
-In the example below, the class `Robot` knows the following:
+In the example below, the class `Robot` now knows the following:
 - It will be passed an object when it is created
 - This object will respond to the method `say_hello`
 
-The `Greeting` class is no longer a dependency, instead it is being injected into the `Robot` class.
+The `Greeting` class is now being *injected* into the `Robot` class.
 
 {% highlight ruby %}
 class Robot
@@ -90,7 +76,7 @@ puts Robot.new("Bleep").introduce
 
 But there's more! Injecting our `Greeting` class lets us also inject any other class that responds to the 'say_hello' method. To demonstrate this, we've created a new class, `GreetingInPolish`.
 
-When we create our first robot and only pass in the name Bleep the default `Greeting` class will be used. However, when we create our new robot Bloop and pass in a new `GreetingInPolish` object Bloop now responds to the `introduce` method with a Polish greeting.
+When we create our first robot and only pass in the name Bleep the default `Greeting` class will be used. However, when we create our second robot Bloop and pass in a new `GreetingInPolish` object Bloop will respond to the `introduce` method with a Polish greeting.
 
 This is possible because both `Greeting` and `GreetingInPolish` respond to the method `say_hello`.
 
@@ -135,21 +121,29 @@ puts Robot.new("Bloop", GreetingInPolish.new).introduce
 
 ## Why use dependency injection in testing?
 
-Using dependency injection in our testing helps us isolate the code under test and to highlight when a class may have too many dependencies.
+Using dependency injection in our testing helps us to:
+- isolate the code under test
+- test functionality that we don't want to actually run
+- highlight when a class may have too many dependencies
 
+#### Isolation
 We can isolate our unit tests using dependency injection by creating a dummy class that exists only in the test environment and injecting it as an argument into our class - much as we did with our `GreetingInPolish` class.
 
+#### Testing code we don't want to run
 Additionally, dependency injection can help us to test functionality that we don't actually want to run as part of the testing process.
 
 For example, imagine that Bleep and Bloop can fly, we might want to test that the `Robot` class is able to call a `blast_off` method without actually making our robots take to the skies every time we run our test suite.
 
-# NOTE: You can also tell if you have a few too many dependencies because you'll have way too much stuff to pass in!
+#### Highlighting when we have too many dependencies
+Because using dependency injection requires us to pass dependencies as an argument to our initialize method it becomes quickly apparent when we have a large number of dependencies. This can provide a hint that the structure of our code needs rethinking and that a class may have too many dependencies.
 
 ## How can we use dependency injection in testing?
 
-In the example below we have removed the `introduce` method and implemented a `fly` method.
+In the example below, we have removed the `introduce` method from our `Robot` class and implemented a new `fly` method.
 
-When it comes to testing the `fly` method we don't want to use the real `FlightController` class or `blast_off` method. Rather, we want to isolate our testing of `fly`. For this unit test all we want to know is whether fly sends the correct messages. We don't actually need to know if the receiving class `FlightController` responds correctly, because we will test that elsewhere, for example, in a unit test on the `blast_off` method or in an integration test.
+When it comes to testing the `fly` method we don't want to use the *real* `FlightController` class or `blast_off` method. We want to be able to test our robot in a lab setting without putting a hole in the roof!
+
+ For this unit test all we want to know is whether `fly` sends the correct messages. We don't actually need to know if the receiving class `FlightController` responds correctly, because we will test that elsewhere, for example, in a unit test on the `blast_off` method or in an integration test.
 
 So, inside our RSpec test we create a new class that only exists within our testing environment `TestFlightController` that implements a test version of `blast_off`. When we call `fly` on our testing robot Bloop we can then expect to receive the testing message: `"This is a test message: 3 ... 2 ... 1 ... BLAST OFF!"`
 
@@ -196,17 +190,8 @@ end
 {% endhighlight %}
 
 ## Resources:
-For an introduction to Dependency Injection in Java outside of the context of testing.
-https://www.freecodecamp.org/news/a-quick-intro-to-dependency-injection-what-it-is-and-when-to-use-it-7578c84fa88f/
+For an introduction to Dependency Injection in Java outside of the context of testing: https://www.freecodecamp.org/news/a-quick-intro-to-dependency-injection-what-it-is-and-when-to-use-it-7578c84fa88f/
 
-For an introduction to dependency injection in Ruby using the dry-rb libraries.
-https://medium.com/@Bakku1505/introduction-to-dependency-injection-in-ruby-dc238655a278
+Explanation of Dependency Injection focused on example: http://rubyblog.pro/2016/10/ruby-dependency-injection
 
-Explanation of Dependency Injection focused on examples
-http://rubyblog.pro/2016/10/ruby-dependency-injection
-
-Explanation of dependency injection in the context of Rails focused on examples.
-https://www.codewithjason.com/dependency-injection-can-make-rails-tests-easier/
-
-A general overview of unit testing in Ruby
-https://blog.codeship.com/unit-testing-in-ruby/
+A general overview of unit testing in Ruby: https://blog.codeship.com/unit-testing-in-ruby/
