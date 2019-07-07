@@ -1,6 +1,10 @@
-# Test doubles in RSpec
+---
+layout: post
+title: Test Doubles
+categories: [coding, code, learn to code, ruby, rspec, testing, unit test, double, dummy, mock, stub, spy]
 
-##### Double is an umbrella term for an object that stands in for a real object in a test.
+---
+#### Double is an umbrella term for a specially created test object that stands in for a real object in a test. Common types of test doubles include dummies, stubs, mocks and spies.
 
 A common analogy used for describing test doubles is that they are like stunt doubles working on a film shoot. Like a stunt double, a test double can stand in for the real code under test when we want particular kinds of behaviours that the real code cannot easily provide. Most importantly, using test doubles helps us isolate unit tests by standing in for classes and methods that are **undefined, unavailable, expensive or difficult** to work with.
 
