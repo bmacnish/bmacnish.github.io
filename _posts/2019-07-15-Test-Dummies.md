@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Dummies in RSpec
+title: Test Dummies in RSpec
 categories: [coding, code, learn to code, ruby, rspec, testing, unit test, double, dummy]
 ---
-#### A *dummy* is a basic placeholder test double that doesn't respond to any messages. We use dummies when we want to pass an object into a method as an argument but don't need any of its functionality in our test. Dummies are the most straight forward kind of test double.
+#### A dummy is a basic placeholder test double that doesn't respond to any messages. We use dummies when we want to pass an object into a method as an argument but don't need any of its functionality in our test. Dummies are the most straight forward kind of test double.
 
 ## Syntax
 The syntax for creating a dummy object in RSpec is very simple. You set a variable name to the value of `double`. `double` is a special kind of RSpec object with some fancy functionality that we will get into a bit further down the track. For the moment through, we are using it as a blank (or dummy) object.
