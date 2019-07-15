@@ -72,17 +72,16 @@ class Robot
   end
 end
 
-
 RSpec.describe 'robot' do
   describe '.new' do
     it 'allows reading of name' do
       flight_controller_dummy = double
-
       expect(Robot.new("Fleep", flight_controller_dummy).name).to eql("Fleep")
     end
   end
 end
 {% endhighlight %}
+
 In the test above, we can see that a new object `flight_controller_dummy` has been created and is a double object. We can then pass this double to our new `Robot` class as the second argument and the test will pass.
 
 Here we have used a simple dummy object as a placeholder for a `FlightController` object letting us isolate the testing of `@name`. However, this is not all that RSpec's `double` object can do and we will look into more sophisticated usages as we move onto **stubs, mocks and spies**.
