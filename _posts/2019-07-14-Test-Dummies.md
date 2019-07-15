@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Test Dummies in RSpec
+title: Test Dummies
 categories: [coding, code, learn to code, ruby, rspec, testing, unit test, double, dummy]
 ---
 #### A dummy is a basic placeholder test double that doesn't respond to any messages. We use dummies when we want to pass an object into a method as an argument but don't need any of its functionality in our test. Dummies are the most straight forward kind of test double.
