@@ -3,7 +3,7 @@ layout: post
 title: Test Mocks
 categories: [coding, code, learn to code, ruby, rspec, testing, unit test, double, dummy, stubs, mocks]
 ---
-##### A mock is an object that has been given a method or list of methods that it must or must not receive during a test to allow the test to pass.
+#### A mock is an object that has been given a method or list of methods that it must or must not receive during a test to allow the test to pass.
 
 ## Syntax
 {% highlight ruby %}
