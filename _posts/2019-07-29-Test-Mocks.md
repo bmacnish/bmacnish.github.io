@@ -13,6 +13,7 @@ expect(object).to receive(:method).with(specific_argument)
 #OR
 expect(object).to receive(:method).with(specific_argument).and_return(return_value)
 {% endhighlight %}
+
 ## Why would you use a mock?
 As we use stubs to test return values we use mocks to test if messages have been sent or received. Generally, we use mocks to test methods that do something rather than methods that return something, methods that **command** rather than **query**.
 
@@ -47,9 +48,11 @@ end
 {% endhighlight %}
 We have added a `self_destruct` method to our main `Robot` class which calls the class method `initiate` on our new class `Terminate`.
 
-Our problem is, we want to test our `initiate` method to make sure it is working properly but we don't want our robot to self destruct - much in the same way we didn't want the robot to fly when we were testing our `flight controller` in previous examples.
+Our problem is, we want to test our `initiate` method to make sure it is working properly but we don't want our robot to actually self destruct. This is the same issue we encountered in our stubbing example when we wanted to test `flight controller`. Let's briefly discuss why these two examples are different.
 
-In our stubbing article, we were testing an api call to a weather service. We expected to get information back and were therefore making a **query**. In our current example, we expect a (rather drastic) action to be taken in response to our method call and are therefore executing a **command**. The differences can be a little subtle but in essence a query method expects to **get information** when it runs and a command method expects to **change the state of something** when it runs.
+In our stubbing example, we were testing an api call to a weather service. We expected to get information back and were therefore making a **query**. In our current mocking example, we expect a (rather drastic) action to be taken in response to our method call and are therefore executing a **command**.
+
+The differences can be a little subtle but in essence a query method expects to **get information** when it runs while a command method expects to **change the state of something** when it runs.
 
 So, we have a piece of code and we know three things about it:
  - we want to test it
@@ -59,21 +62,23 @@ So, we have a piece of code and we know three things about it:
 A perfect situation to try out mocking!
 
 ## Test example
-In our test below, we are going to use the RSpec mocking syntax to set up the expectation that `Terminate` will receive the `initiate` method. RSpec is now watching `Terminate` and will not allow the test to pass unless it receives `initiate`.
+In our test below, we use the RSpec mocking syntax to set up the expectation that `Terminate` will receive the `initiate` method. RSpec is now watching `Terminate` and will not allow the test to pass **unless** it receives `initiate`.
 
 We will then create a new robot Fleep, and call `self_destruct`. If the test passes we know that `initiate` was received by `Terminate`.
 
-To reassure ourselves that our poor robot has not really been blown up we can double check that RSpec is definitely only checking that `initiate` has been received and not running the real `initiate` code as part of the test.
+To reassure ourselves that our poor robot has not really been blown up we can double check that RSpec is definitely only checking that `initiate` has been received and is not running the real `initiate` code.
 
-To do this we have set the test to provide a return value. By calling `puts` on the final line of our test we can check to make sure that the test return value,
+To do this we set up the test to provide the following return value:
+
 {% highlight ruby %}
 "The test self destruct sequence has run"
 {% endhighlight %}
-and not the return value for the real sequence,
+
+Rather than the return value for the real sequence.
+
 {% highlight ruby %}
 "Self destruct sequence initiated"
 {% endhighlight %}
-has been run.
 
 {% highlight ruby %}
 RSpec.describe 'Terminate' do
@@ -86,19 +91,20 @@ RSpec.describe 'Terminate' do
   end
 end
 {% endhighlight %}
+
 ## That's a bit weird ...
 
-You might have noticed that our test with the mock is structured differently to other tests.
+You might have noticed that our test is structured differently to other tests.
 
 You are probably used to seeing tests structured in three steps.
 
 1. The setup
 2. The execution
-3. The exception
+3. The expectation
 
-When we use mocks, we have to set the expectation before we execute. The words we use in RSpec help us to remember this, we are **expecting** our object **to receive** a message in the future. So the expectation needs to come before the code is executed.
+When we use mocks, we have to set the expectation before we execute the code. The words we use in RSpec help us to remember this, we are **expecting** our object **to receive** a message in the future. So the expectation needs to come before the code is executed.
 
-Here's our mock, broken down into its setup, execution and expectation, demonstrating how these steps are not occurring in the order we are used to.
+Here's our test, broken down into its setup, execution and expectation, demonstrating how these steps are not occurring in the order we are used to.
 
 {% highlight ruby %}
 RSpec.describe 'Terminate' do
