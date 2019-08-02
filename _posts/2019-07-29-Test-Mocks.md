@@ -68,17 +68,9 @@ We will then create a new robot Fleep, and call `self_destruct`. If the test pas
 
 To reassure ourselves that our poor robot has not really been blown up we can double check that RSpec is definitely only checking that `initiate` has been received and is not running the real `initiate` code.
 
-To do this we set up the test to provide the following return value:
+To do this we set up the test to provide the following return value, `'The test self destruct sequence has run'`.
 
-{% highlight ruby %}
-"The test self destruct sequence has run"
-{% endhighlight %}
-
-Rather than the return value for the real sequence.
-
-{% highlight ruby %}
-"Self destruct sequence initiated"
-{% endhighlight %}
+Rather than the return value for the real sequence, `'Self destruct sequence initiated'`.
 
 {% highlight ruby %}
 RSpec.describe 'Terminate' do
